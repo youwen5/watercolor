@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { allCourses } from './lib/stores.js';
+  import { allCourses, mobileView } from './lib/stores.js';
   import Header from './components/Header.svelte';
   import SearchPanel from './components/SearchPanel.svelte';
   import Calendar from './components/Calendar.svelte';
@@ -21,7 +21,8 @@
     <p class="font-serif text-2xl italic text-ink-light tracking-wide">Loading courses...</p>
   </div>
 {:else}
-  <div class="h-screen flex flex-col overflow-hidden">
+  <!-- Desktop layout -->
+  <div class="hidden lg:flex h-screen flex-col overflow-hidden">
     <Header />
     <div class="flex flex-1 min-h-0">
       <SearchPanel />
@@ -33,6 +34,47 @@
       </main>
     </div>
   </div>
+
+  <!-- Mobile layout -->
+  <div class="flex lg:hidden h-dvh flex-col overflow-hidden">
+    <Header />
+
+    {#if $mobileView === 'search'}
+      <div class="flex-1 min-h-0 flex flex-col overflow-hidden">
+        <SearchPanel mobile={true} />
+      </div>
+    {:else}
+      <main class="flex-1 flex flex-col min-h-0">
+        <WeekSelector />
+        <div class="flex-1 min-h-0 overflow-auto p-3">
+          <Calendar />
+        </div>
+      </main>
+    {/if}
+
+    <!-- Mobile tab bar -->
+    <nav class="shrink-0 border-t border-border bg-white flex">
+      <button
+        onclick={() => mobileView.set('search')}
+        class="flex-1 py-3 text-sm text-center transition-colors cursor-pointer
+          {$mobileView === 'search'
+            ? 'text-ink font-medium border-t-2 border-ink -mt-px'
+            : 'text-ink-faint'}"
+      >
+        Courses
+      </button>
+      <button
+        onclick={() => mobileView.set('schedule')}
+        class="flex-1 py-3 text-sm text-center transition-colors cursor-pointer
+          {$mobileView === 'schedule'
+            ? 'text-ink font-medium border-t-2 border-ink -mt-px'
+            : 'text-ink-faint'}"
+      >
+        Schedule
+      </button>
+    </nav>
+  </div>
+
   <ConflictModal />
   <CourseDetail />
 {/if}

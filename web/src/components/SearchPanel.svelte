@@ -15,6 +15,7 @@
   import { DAYS, PERIODS } from '../lib/constants.js';
   import CourseCard from './CourseCard.svelte';
 
+  let { mobile = false } = $props();
   let panelCollapsed = $state(false);
   let deptSelection = $state([]);
 
@@ -37,7 +38,8 @@
   );
 </script>
 
-{#if panelCollapsed}
+<!-- Desktop: collapsible sidebar -->
+{#if !mobile && panelCollapsed}
   <button
     onclick={() => panelCollapsed = false}
     class="absolute left-0 top-16 z-20 bg-white border border-l-0 border-border rounded-r px-2 py-3 text-ink-light hover:text-ink hover:bg-surface-alt transition-colors cursor-pointer shadow-sm"
@@ -46,9 +48,12 @@
     &rsaquo;
   </button>
 {:else}
-  <aside class="w-[380px] min-w-[380px] border-r border-border bg-white flex flex-col overflow-hidden">
+  <aside class="{mobile
+    ? 'flex flex-col overflow-hidden flex-1'
+    : 'w-[380px] min-w-[380px] border-r border-border bg-white flex flex-col overflow-hidden'}">
+
     <!-- Introduction -->
-    <div class="shrink-0 px-4 pt-4 pb-3 border-b border-border-light">
+    <div class="shrink-0 px-4 pt-3 sm:pt-4 pb-2 sm:pb-3 border-b border-border-light">
       <p class="text-xs text-ink-light leading-relaxed">
         Watercolor is an unofficial course planner for Tsinghua University's Spring 2026 Semester.
         Created by <a href="https://web.youwen.dev" target="_blank" rel="noreferrer" class="underline underline-offset-2 hover:text-ink transition-colors">Youwen Wu</a>.
@@ -57,8 +62,8 @@
     </div>
 
     <!-- Search header (fixed, never scrolls) -->
-    <div class="shrink-0 p-4 border-b border-border-light">
-      <div class="flex items-center justify-between mb-3">
+    <div class="shrink-0 p-3 sm:p-4 border-b border-border-light">
+      <div class="flex items-center justify-between mb-2 sm:mb-3">
         <h2 class="font-serif italic text-lg text-ink">Courses</h2>
         <div class="flex items-center gap-2">
           {#if hasActiveFilters}
@@ -69,13 +74,15 @@
               Clear filters
             </button>
           {/if}
-          <button
-            onclick={() => panelCollapsed = true}
-            class="text-ink-faint hover:text-ink-light text-lg leading-none cursor-pointer"
-            aria-label="Collapse panel"
-          >
-            &lsaquo;
-          </button>
+          {#if !mobile}
+            <button
+              onclick={() => panelCollapsed = true}
+              class="text-ink-faint hover:text-ink-light text-lg leading-none cursor-pointer"
+              aria-label="Collapse panel"
+            >
+              &lsaquo;
+            </button>
+          {/if}
         </div>
       </div>
 
@@ -88,7 +95,7 @@
       />
 
       <!-- Department multi-select -->
-      <div class="mt-3">
+      <div class="mt-2 sm:mt-3">
         <span class="text-[11px] font-medium text-ink-faint uppercase tracking-wider">Department</span>
         <div class="mt-1 dept-select">
           <MultiSelect
@@ -117,7 +124,7 @@
       </div>
 
       <!-- Credit range + day + period -->
-      <div class="mt-3 space-y-2">
+      <div class="mt-2 sm:mt-3 space-y-2">
         <div>
           <span class="text-[11px] font-medium text-ink-faint uppercase tracking-wider">Credits</span>
           <div class="flex items-center gap-2 mt-1">

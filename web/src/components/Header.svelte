@@ -11,28 +11,29 @@
   }
 </script>
 
-<header class="border-b border-border bg-white/80 backdrop-blur-sm sticky top-0 z-30">
-  <div class="flex items-center justify-between px-6 py-3">
-    <div class="flex items-baseline gap-3">
-      <h1 class="font-serif text-2xl tracking-tight text-ink">
+<header class="border-b border-border bg-white/80 backdrop-blur-sm sticky top-0 z-30 shrink-0">
+  <div class="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 gap-3">
+    <div class="flex items-baseline gap-2 sm:gap-3 min-w-0">
+      <h1 class="font-serif text-xl sm:text-2xl tracking-tight text-ink shrink-0">
         <span class="italic">Watercolor</span>
       </h1>
-      <span class="text-sm text-ink-faint font-light tracking-wide">Tsinghua Course Selector</span>
+      <span class="text-sm text-ink-faint font-light tracking-wide hidden sm:inline">Tsinghua Course Selector</span>
     </div>
 
-    <div class="flex items-center gap-4">
-      <div class="text-sm text-ink-light">
-        <span class="font-serif italic text-lg text-ink">{$totalCredits}</span>
-        <span class="ml-1">credits</span>
-        <span class="mx-2 text-border">|</span>
-        <span class="font-serif italic text-lg text-ink">{$selectedCourses.length}</span>
-        <span class="ml-1">courses</span>
+    <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+      <div class="text-xs sm:text-sm text-ink-light">
+        <span class="font-serif italic text-base sm:text-lg text-ink">{$totalCredits}</span>
+        <span class="ml-0.5 sm:ml-1 hidden sm:inline">credits</span>
+        <span class="ml-0.5 sm:hidden">cr</span>
+        <span class="mx-1 sm:mx-2 text-border">|</span>
+        <span class="font-serif italic text-base sm:text-lg text-ink">{$selectedCourses.length}</span>
+        <span class="ml-0.5 sm:ml-1 hidden sm:inline">courses</span>
       </div>
 
       <div class="relative">
         <button
           onclick={() => showExport = !showExport}
-          class="px-3 py-1.5 text-sm border border-border rounded hover:bg-surface-alt transition-colors cursor-pointer"
+          class="px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm border border-border rounded hover:bg-surface-alt transition-colors cursor-pointer"
         >
           Export
         </button>
@@ -62,9 +63,9 @@
       {#if $selectedCourses.length > 0}
         <button
           onclick={handleClearAll}
-          class="px-3 py-1.5 text-sm text-conflict border border-conflict/30 rounded hover:bg-conflict/5 transition-colors cursor-pointer"
+          class="px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm text-conflict border border-conflict/30 rounded hover:bg-conflict/5 transition-colors cursor-pointer"
         >
-          Clear all
+          Clear
         </button>
       {/if}
     </div>

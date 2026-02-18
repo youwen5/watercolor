@@ -72,6 +72,9 @@ export const selectedIds = createSelectionStore();
 // ── Current week (null = "all weeks") ─────────────────────────
 export const currentWeek = writable(1);
 
+// ── Mobile view tab ───────────────────────────────────────────
+export const mobileView = writable('search'); // 'search' | 'schedule'
+
 // ── Search & filters ──────────────────────────────────────────
 export const searchQuery = writable('');
 export const filterDepartments = writable([]); // array of department strings
