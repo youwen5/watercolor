@@ -1,0 +1,22 @@
+# Nix
+result
+result-*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Scraped data (temporary)
+page_source.html
+
+# Output data
+*.csv
+*.json
+courses.db
+
+# Web app
+web/node_modules/
+web/dist/
