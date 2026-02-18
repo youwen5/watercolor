@@ -74,8 +74,9 @@ export const currentWeek = writable(1);
 
 // ── Search & filters ──────────────────────────────────────────
 export const searchQuery = writable('');
-export const filterDepartment = writable('');
-export const filterCredit = writable('');
+export const filterDepartments = writable([]); // array of department strings
+export const filterCreditMin = writable('');    // '' = no min
+export const filterCreditMax = writable('');    // '' = no max
 export const filterDay = writable('');
 export const filterPeriod = writable('');
 
@@ -96,8 +97,8 @@ export const selectedCourses = derived(
 
 // ── Derived: filtered courses for search ──────────────────────
 export const filteredCourses = derived(
-  [allCourses, searchQuery, filterDepartment, filterCredit, filterDay, filterPeriod],
-  ([$all, $query, $dept, $credit, $day, $period]) => {
+  [allCourses, searchQuery, filterDepartments, filterCreditMin, filterCreditMax, filterDay, filterPeriod],
+  ([$all, $query, $depts, $creditMin, $creditMax, $day, $period]) => {
     let result = $all;
 
     if ($query) {
@@ -110,12 +111,18 @@ export const filteredCourses = derived(
       );
     }
 
-    if ($dept) {
-      result = result.filter(c => c.department === $dept);
+    if ($depts.length > 0) {
+      result = result.filter(c => $depts.includes(c.department));
     }
 
-    if ($credit) {
-      result = result.filter(c => c.credit === parseInt($credit, 10));
+    if ($creditMin) {
+      const min = parseInt($creditMin, 10);
+      result = result.filter(c => c.credit >= min);
+    }
+
+    if ($creditMax) {
+      const max = parseInt($creditMax, 10);
+      result = result.filter(c => c.credit <= max);
     }
 
     if ($day) {

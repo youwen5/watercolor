@@ -21,13 +21,13 @@
     <p class="font-serif text-2xl italic text-ink-light tracking-wide">Loading courses...</p>
   </div>
 {:else}
-  <div class="min-h-screen flex flex-col">
+  <div class="h-screen flex flex-col overflow-hidden">
     <Header />
-    <div class="flex flex-1 overflow-hidden">
+    <div class="flex flex-1 min-h-0">
       <SearchPanel />
-      <main class="flex-1 flex flex-col overflow-hidden">
+      <main class="flex-1 flex flex-col min-h-0 min-w-0">
         <WeekSelector />
-        <div class="flex-1 overflow-auto p-4">
+        <div class="flex-1 min-h-0 overflow-auto p-4">
           <Calendar />
         </div>
       </main>

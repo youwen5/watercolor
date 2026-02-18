@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      svelte-multiselect:
+        specifier: ^11.6.1
+        version: 11.6.1(svelte@5.51.3)
     devDependencies:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^6.2.1
@@ -610,6 +614,21 @@ packages:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
 
+  svelte-multiselect@11.6.1:
+    resolution: {integrity: sha512-1oq8fs+x/DhOzLc7YTPTFcLVMXOzrAn/8bD2q0lPvM4zzK/iGbmltRwyxYVzDhcbyT9VMPEJz+eNki9EzM2N2A==}
+    peerDependencies:
+      '@wooorm/starry-night': ^3.0.0
+      abstract-syntax-tree: ^2.0.0
+      svelte: ^5.48.0
+      svelte-preprocess: ^6.0.0
+    peerDependenciesMeta:
+      '@wooorm/starry-night':
+        optional: true
+      abstract-syntax-tree:
+        optional: true
+      svelte-preprocess:
+        optional: true
+
   svelte@5.51.3:
     resolution: {integrity: sha512-3+ni7BMjiEQeMCa1fDQzHy2ESAebgQDVOTuE4jlj2/QOAB2grRta8ew80p95miWE+ZmimpL7B3t9SSO4rv0aqQ==}
     engines: {node: '>=18'}
@@ -1113,6 +1132,10 @@ snapshots:
       fsevents: 2.3.3
 
   source-map-js@1.2.1: {}
+
+  svelte-multiselect@11.6.1(svelte@5.51.3):
+    dependencies:
+      svelte: 5.51.3
 
   svelte@5.51.3:
     dependencies:

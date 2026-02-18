@@ -23,7 +23,7 @@
   }
 
   function handleKeydown(e) {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
     if (e.key === 'ArrowLeft') prev();
     if (e.key === 'ArrowRight') next();
   }
@@ -31,48 +31,72 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="flex items-center gap-2 px-4 py-2 border-b border-border-light bg-white/50">
-  <button
-    onclick={prev}
-    class="w-7 h-7 flex items-center justify-center rounded text-ink-light hover:bg-surface-alt transition-colors cursor-pointer"
-    disabled={$currentWeek === 1}
-  >
-    &larr;
-  </button>
+<div class="border-b border-border bg-white px-4 py-3">
+  <div class="flex items-center gap-3">
+    <div class="shrink-0">
+      <span class="font-serif italic text-sm text-ink-light tracking-wide">Week</span>
+      {#if $currentWeek !== null}
+        <span class="font-serif text-2xl text-ink ml-1 tabular-nums">{$currentWeek}</span>
+        <span class="text-xs text-ink-faint ml-0.5">/ {MAX_WEEK}</span>
+      {:else}
+        <span class="font-serif italic text-lg text-ink ml-1">All</span>
+      {/if}
+    </div>
 
-  <div class="flex gap-0.5 flex-1 justify-center">
-    {#each weeks as w}
+    <div class="flex items-center gap-1 flex-1 min-w-0">
       <button
-        onclick={() => currentWeek.set(w)}
-        class="w-8 h-7 text-xs rounded transition-all cursor-pointer
-          {$currentWeek === w
-            ? 'bg-ink text-white font-medium'
-            : $currentWeek === null
-              ? 'bg-ink/10 text-ink-light hover:bg-ink/20'
-              : 'text-ink-faint hover:bg-surface-alt hover:text-ink-light'
-          }"
+        onclick={prev}
+        class="shrink-0 w-7 h-7 flex items-center justify-center rounded text-ink-light hover:bg-surface-alt disabled:opacity-30 transition-colors cursor-pointer"
+        disabled={$currentWeek === 1}
+        aria-label="Previous week"
       >
-        {w}
+        &larr;
       </button>
-    {/each}
+
+      <div class="flex gap-px flex-1 justify-center">
+        {#each weeks as w}
+          <button
+            onclick={() => currentWeek.set(w)}
+            class="flex-1 max-w-[36px] h-8 text-xs rounded-sm transition-all cursor-pointer
+              {$currentWeek === w
+                ? 'bg-ink text-white font-semibold shadow-sm'
+                : $currentWeek === null
+                  ? 'bg-ink/8 text-ink-light hover:bg-ink/15 font-medium'
+                  : 'text-ink-faint hover:bg-surface-alt hover:text-ink-light'
+              }"
+            aria-label="Week {w}"
+            aria-current={$currentWeek === w ? 'true' : undefined}
+          >
+            {w}
+          </button>
+        {/each}
+      </div>
+
+      <button
+        onclick={next}
+        class="shrink-0 w-7 h-7 flex items-center justify-center rounded text-ink-light hover:bg-surface-alt disabled:opacity-30 transition-colors cursor-pointer"
+        disabled={$currentWeek === MAX_WEEK}
+        aria-label="Next week"
+      >
+        &rarr;
+      </button>
+    </div>
+
+    <button
+      onclick={toggleAll}
+      class="shrink-0 px-3 py-1.5 text-xs border rounded transition-colors cursor-pointer
+        {$currentWeek === null
+          ? 'border-ink bg-ink text-white font-medium'
+          : 'border-border text-ink-light hover:bg-surface-alt hover:border-ink-faint'
+        }"
+    >
+      All weeks
+    </button>
   </div>
 
-  <button
-    onclick={next}
-    class="w-7 h-7 flex items-center justify-center rounded text-ink-light hover:bg-surface-alt transition-colors cursor-pointer"
-    disabled={$currentWeek === MAX_WEEK}
-  >
-    &rarr;
-  </button>
-
-  <button
-    onclick={toggleAll}
-    class="ml-2 px-3 py-1 text-xs border rounded transition-colors cursor-pointer
-      {$currentWeek === null
-        ? 'border-ink bg-ink text-white'
-        : 'border-border text-ink-light hover:bg-surface-alt'
-      }"
-  >
-    All
-  </button>
+  <p class="text-[10px] text-ink-faint mt-1.5 tracking-wide">
+    {$currentWeek !== null
+      ? `Showing courses scheduled in week ${$currentWeek}. Use \u2190 \u2192 arrow keys to navigate.`
+      : 'Showing all courses regardless of week. Click a week number to filter.'}
+  </p>
 </div>
