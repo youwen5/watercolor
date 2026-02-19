@@ -69,4 +69,12 @@
       {/if}
     </span>
   </div>
+
+  {#if course.course_features}
+    <div class="mt-1 text-[11px] text-ink-faint truncate">{course.course_features}</div>
+  {/if}
+
+  {#if course.remarks}
+    <div class="mt-1 text-[11px] text-ink-faint italic truncate">{course.remarks}</div>
+  {/if}
 </div>
