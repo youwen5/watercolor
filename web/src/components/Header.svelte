@@ -72,4 +72,7 @@
       {/if}
     </div>
   </div>
+  <div class="px-4 sm:px-6 pb-2 -mt-1 text-[11px] text-ink-faint leading-snug">
+    An unofficial course planner for THU 2026 Spring Semester. Data acquired by web-scraping, so may not be fully up to date. Last updated 02/19/2026. Made by <a href="https://web.youwen.dev" target="_blank" rel="noreferrer" class="underline underline-offset-2 hover:text-ink-light transition-colors">Youwen Wu</a>.
+  </div>
 </header>

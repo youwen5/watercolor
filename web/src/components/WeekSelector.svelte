@@ -31,12 +31,12 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="border-b border-border bg-white px-4 py-3">
-  <div class="flex items-center gap-3">
+<div class="border-b border-border bg-white px-3 sm:px-4 py-2 sm:py-3">
+  <div class="flex items-center gap-2 sm:gap-3">
     <div class="shrink-0">
       <span class="font-serif italic text-sm text-ink-light tracking-wide">Week</span>
       {#if $currentWeek !== null}
-        <span class="font-serif text-2xl text-ink ml-1 tabular-nums">{$currentWeek}</span>
+        <span class="font-serif text-xl sm:text-2xl text-ink ml-1 tabular-nums">{$currentWeek}</span>
         <span class="text-xs text-ink-faint ml-0.5">/ {MAX_WEEK}</span>
       {:else}
         <span class="font-serif italic text-lg text-ink ml-1">All</span>
@@ -53,11 +53,11 @@
         &larr;
       </button>
 
-      <div class="flex gap-px flex-1 justify-center">
+      <div class="flex gap-px flex-1 overflow-x-auto scrollbar-none">
         {#each weeks as w}
           <button
             onclick={() => currentWeek.set(w)}
-            class="flex-1 max-w-[36px] h-8 text-xs rounded-sm transition-all cursor-pointer
+            class="shrink-0 w-7 sm:w-auto sm:flex-1 sm:max-w-[36px] h-7 sm:h-8 text-xs rounded-sm transition-all cursor-pointer
               {$currentWeek === w
                 ? 'bg-ink text-white font-semibold shadow-sm'
                 : $currentWeek === null
@@ -84,17 +84,17 @@
 
     <button
       onclick={toggleAll}
-      class="shrink-0 px-3 py-1.5 text-xs border rounded transition-colors cursor-pointer
+      class="shrink-0 px-2 sm:px-3 py-1.5 text-xs border rounded transition-colors cursor-pointer whitespace-nowrap
         {$currentWeek === null
           ? 'border-ink bg-ink text-white font-medium'
           : 'border-border text-ink-light hover:bg-surface-alt hover:border-ink-faint'
         }"
     >
-      All weeks
+      All
     </button>
   </div>
 
-  <p class="text-[10px] text-ink-faint mt-1.5 tracking-wide">
+  <p class="hidden sm:block text-[10px] text-ink-faint mt-1.5 tracking-wide">
     {$currentWeek !== null
       ? `Showing courses scheduled in week ${$currentWeek}. Use \u2190 \u2192 arrow keys to navigate.`
       : 'Showing all courses regardless of week. Click a week number to filter.'}

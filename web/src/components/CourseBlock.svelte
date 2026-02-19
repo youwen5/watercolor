@@ -34,7 +34,7 @@
 
   <div class="font-medium truncate pr-3">{course.title_en}</div>
   <div class="truncate opacity-80">{course.title_zh}</div>
-  <div class="truncate opacity-70 mt-0.5">{course.instructor}</div>
+  <div class="truncate opacity-70 mt-0.5">{course.instructor} &middot; {course.credit}cr</div>
 
   {#if showWeekBadge}
     <div class="mt-0.5 text-[9px] opacity-60 truncate">

@@ -68,7 +68,7 @@
   <!-- Trigger -->
   <button
     type="button"
-    class="w-full min-h-[34px] px-2 py-1 border rounded text-left text-xs bg-surface
+    class="w-full px-2 py-1.5 border rounded text-left text-xs bg-surface
       flex flex-wrap items-center gap-1 cursor-pointer transition-colors
       {open ? 'border-ink-faint' : 'border-border'}"
     onclick={() => {

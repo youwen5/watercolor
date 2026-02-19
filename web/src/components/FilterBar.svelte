@@ -56,7 +56,7 @@
     </div>
 
     <!-- Department -->
-    <div class="w-[200px]">
+    <div class="w-full sm:w-[200px]">
       <span class="text-[10px] font-medium text-ink-faint uppercase tracking-wider">Department</span>
       <div class="mt-0.5">
         <MultiSelect
@@ -70,7 +70,7 @@
     </div>
 
     <!-- Credits -->
-    <div class="w-[130px]">
+    <div class="w-full sm:w-[130px]">
       <span class="text-[10px] font-medium text-ink-faint uppercase tracking-wider">Credits</span>
       <div class="flex items-center gap-1 mt-0.5">
         <select
@@ -98,7 +98,7 @@
     </div>
 
     <!-- Day -->
-    <div class="w-[140px]">
+    <div class="w-full sm:w-[140px]">
       <span class="text-[10px] font-medium text-ink-faint uppercase tracking-wider">Day</span>
       <div class="mt-0.5">
         <MultiSelect
@@ -111,7 +111,7 @@
     </div>
 
     <!-- Period -->
-    <div class="w-[160px]">
+    <div class="w-full sm:w-[160px]">
       <span class="text-[10px] font-medium text-ink-faint uppercase tracking-wider">Period</span>
       <div class="mt-0.5">
         <MultiSelect
@@ -123,19 +123,20 @@
       </div>
     </div>
 
-    <!-- Clear + count -->
-    <div class="flex items-center gap-3 pb-0.5">
-      {#if hasActiveFilters}
-        <button
-          onclick={clearFilters}
-          class="text-[11px] text-ink-faint hover:text-ink-light transition-colors cursor-pointer whitespace-nowrap"
-        >
-          Clear filters
-        </button>
-      {/if}
-      <span class="text-[11px] text-ink-faint whitespace-nowrap">
-        <span class="font-medium text-ink-light">{$filteredCourses.length}</span>/{$allCourses.length}
-      </span>
-    </div>
+  </div>
+
+  <!-- Clear + count -->
+  <div class="flex items-center gap-3 mt-1.5">
+    <span class="text-[11px] text-ink-faint">
+      Showing <span class="font-medium text-ink-light">{$filteredCourses.length}</span> courses out of {$allCourses.length}
+    </span>
+    {#if hasActiveFilters}
+      <button
+        onclick={clearFilters}
+        class="text-[11px] text-ink-faint hover:text-ink-light transition-colors cursor-pointer whitespace-nowrap"
+      >
+        Clear filters
+      </button>
+    {/if}
   </div>
 </div>

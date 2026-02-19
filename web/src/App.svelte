@@ -41,6 +41,28 @@
   <div class="flex lg:hidden h-dvh flex-col overflow-hidden">
     <Header />
 
+    <!-- Mobile tab bar -->
+    <nav class="shrink-0 border-b border-border bg-white flex">
+      <button
+        onclick={() => mobileView.set('search')}
+        class="flex-1 py-2.5 text-sm text-center transition-colors cursor-pointer
+          {$mobileView === 'search'
+            ? 'text-ink font-medium border-b-2 border-ink -mb-px'
+            : 'text-ink-faint'}"
+      >
+        Courses
+      </button>
+      <button
+        onclick={() => mobileView.set('schedule')}
+        class="flex-1 py-2.5 text-sm text-center transition-colors cursor-pointer
+          {$mobileView === 'schedule'
+            ? 'text-ink font-medium border-b-2 border-ink -mb-px'
+            : 'text-ink-faint'}"
+      >
+        Schedule
+      </button>
+    </nav>
+
     {#if $mobileView === 'search'}
       <FilterBar />
       <div class="flex-1 min-h-0 flex flex-col overflow-hidden">
@@ -54,28 +76,6 @@
         </div>
       </main>
     {/if}
-
-    <!-- Mobile tab bar -->
-    <nav class="shrink-0 border-t border-border bg-white flex">
-      <button
-        onclick={() => mobileView.set('search')}
-        class="flex-1 py-3 text-sm text-center transition-colors cursor-pointer
-          {$mobileView === 'search'
-            ? 'text-ink font-medium border-t-2 border-ink -mt-px'
-            : 'text-ink-faint'}"
-      >
-        Courses
-      </button>
-      <button
-        onclick={() => mobileView.set('schedule')}
-        class="flex-1 py-3 text-sm text-center transition-colors cursor-pointer
-          {$mobileView === 'schedule'
-            ? 'text-ink font-medium border-t-2 border-ink -mt-px'
-            : 'text-ink-faint'}"
-      >
-        Schedule
-      </button>
-    </nav>
   </div>
 
   <ConflictModal />

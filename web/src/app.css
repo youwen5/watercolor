@@ -17,6 +17,14 @@
   --color-conflict: #dc2626;
 }
 
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @layer base {
   body {
     @apply bg-surface text-ink font-sans antialiased;
