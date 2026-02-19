@@ -96,7 +96,7 @@
 
   <p class="hidden sm:block text-[10px] text-ink-faint mt-1.5 tracking-wide">
     {$currentWeek !== null
-      ? `Showing courses scheduled in week ${$currentWeek}. Use \u2190 \u2192 arrow keys to navigate.`
-      : 'Showing all courses regardless of week. Click a week number to filter.'}
+      ? `Showing courses scheduled in week ${$currentWeek}. Use \u2190 \u2192 arrow keys to navigate. Click on calendar blocks to search for courses during that time period or add custom blocks.`
+      : 'Showing all courses regardless of week. Click a week number to filter. Click on calendar blocks to search for courses during that time period or add custom blocks.'}
   </p>
 </div>
