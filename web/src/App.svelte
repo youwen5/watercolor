@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { allCourses, mobileView } from './lib/stores.js';
   import Header from './components/Header.svelte';
+  import FilterBar from './components/FilterBar.svelte';
   import SearchPanel from './components/SearchPanel.svelte';
   import Calendar from './components/Calendar.svelte';
   import WeekSelector from './components/WeekSelector.svelte';
@@ -24,6 +25,7 @@
   <!-- Desktop layout -->
   <div class="hidden lg:flex h-screen flex-col overflow-hidden">
     <Header />
+    <FilterBar />
     <div class="flex flex-1 min-h-0">
       <SearchPanel />
       <main class="flex-1 flex flex-col min-h-0 min-w-0">
@@ -40,6 +42,7 @@
     <Header />
 
     {#if $mobileView === 'search'}
+      <FilterBar />
       <div class="flex-1 min-h-0 flex flex-col overflow-hidden">
         <SearchPanel mobile={true} />
       </div>

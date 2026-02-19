@@ -178,17 +178,3 @@ export const hasWeekendCourses = derived(
   selectedCourses,
   $selected => $selected.some(c => c.slots.some(s => s.day >= 6))
 );
-
-// ── Derived: whether period 5 or higher is needed ─────────────
-export const maxPeriod = derived(
-  selectedCourses,
-  $selected => {
-    let max = 4; // Show at least 4 periods by default
-    for (const c of $selected) {
-      for (const s of c.slots) {
-        if (s.period > max) max = s.period;
-      }
-    }
-    return max;
-  }
-);

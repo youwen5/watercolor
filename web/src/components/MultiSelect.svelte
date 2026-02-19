@@ -74,7 +74,6 @@
     onclick={() => {
       open = !open;
       if (open && searchable) {
-        // defer focus to next tick so the input exists
         setTimeout(() => inputEl?.focus(), 0);
       }
     }}
@@ -93,14 +92,12 @@
           >&times;</button>
         </span>
       {/each}
-      {#if selected.length > 0}
-        <button
-          type="button"
-          class="ml-auto text-ink-faint hover:text-ink-light text-[11px] cursor-pointer transition-colors"
-          onclick={(e) => { e.stopPropagation(); clearAll(); }}
-          aria-label="Clear all"
-        >&times;</button>
-      {/if}
+      <button
+        type="button"
+        class="ml-auto shrink-0 text-ink-faint hover:text-ink-light text-[11px] cursor-pointer transition-colors"
+        onclick={(e) => { e.stopPropagation(); clearAll(); }}
+        aria-label="Clear all"
+      >&times;</button>
     {/if}
   </button>
 

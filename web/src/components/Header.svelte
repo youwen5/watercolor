@@ -17,7 +17,9 @@
       <h1 class="font-serif text-xl sm:text-2xl tracking-tight text-ink shrink-0">
         <span class="italic">Watercolor</span>
       </h1>
-      <span class="text-sm text-ink-faint font-light tracking-wide hidden sm:inline">Tsinghua Course Selector</span>
+      <span class="text-sm text-ink-faint font-light tracking-wide hidden sm:inline">Tsinghua Course Selector &middot;
+        <a href="https://github.com/youwen5/watercolor" target="_blank" rel="noreferrer" class="underline underline-offset-2 hover:text-ink-light transition-colors">Source</a>
+      </span>
     </div>
 
     <div class="flex items-center gap-2 sm:gap-4 shrink-0">

@@ -1,10 +1,10 @@
 <script>
   import { PERIODS, DAYS } from '../lib/constants.js';
-  import { calendarGrid, hasWeekendCourses, maxPeriod, currentWeek } from '../lib/stores.js';
+  import { calendarGrid, hasWeekendCourses, currentWeek } from '../lib/stores.js';
   import CalendarCell from './CalendarCell.svelte';
 
   let visibleDays = $derived($hasWeekendCourses ? DAYS : DAYS.slice(0, 5));
-  let visiblePeriods = $derived(PERIODS.filter(p => p.id <= $maxPeriod));
+  let visiblePeriods = PERIODS;
 </script>
 
 <div
