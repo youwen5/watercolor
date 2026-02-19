@@ -6,10 +6,26 @@
 <script>
   import { DAYS, PERIODS } from '../lib/constants.js';
   import { formatWeeks } from '../lib/parser.js';
-  import { selectedIds } from '../lib/stores.js';
+  import { selectedIds, selectedCourses } from '../lib/stores.js';
+  import { findConflicts } from '../lib/conflicts.js';
+  import { pendingConflict } from './ConflictModal.svelte';
+  import { get } from 'svelte/store';
+
+  let isSelected = $derived($selectedIds.includes($detailCourse?.id));
 
   function close() {
     detailCourse.set(null);
+  }
+
+  function addCourse() {
+    const currentSelected = get(selectedCourses);
+    const conflicts = findConflicts(currentSelected, $detailCourse);
+    if (conflicts.length > 0) {
+      pendingConflict.set({ course: $detailCourse, conflicts });
+    } else {
+      selectedIds.add($detailCourse.id);
+    }
+    close();
   }
 
   function handleKeydown(e) {
@@ -95,12 +111,21 @@
       {/if}
 
       <div class="mt-6 flex justify-end">
-        <button
-          onclick={() => { selectedIds.remove($detailCourse.id); close(); }}
-          class="px-4 py-2 text-sm text-conflict border border-conflict/30 rounded hover:bg-conflict/5 transition-colors cursor-pointer"
-        >
-          Remove from schedule
-        </button>
+        {#if isSelected}
+          <button
+            onclick={() => { selectedIds.remove($detailCourse.id); close(); }}
+            class="px-4 py-2 text-sm text-conflict border border-conflict/30 rounded hover:bg-conflict/5 transition-colors cursor-pointer"
+          >
+            Remove from schedule
+          </button>
+        {:else}
+          <button
+            onclick={addCourse}
+            class="px-4 py-2 text-sm bg-ink text-white rounded hover:bg-ink/90 transition-colors cursor-pointer"
+          >
+            Add to schedule
+          </button>
+        {/if}
       </div>
     </div>
   </div>

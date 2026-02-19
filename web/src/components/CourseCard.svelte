@@ -3,11 +3,13 @@
   import { formatTimeSlots } from '../lib/parser.js';
   import { findConflicts } from '../lib/conflicts.js';
   import { pendingConflict } from './ConflictModal.svelte';
+  import { detailCourse } from './CourseDetail.svelte';
   import { get } from 'svelte/store';
 
   let { course, selected = false } = $props();
 
-  function addCourse() {
+  function addCourse(e) {
+    e.stopPropagation();
     if (selected) return;
 
     const currentSelected = get(selectedCourses);
@@ -20,12 +22,14 @@
     }
   }
 
-  function removeCourse() {
+  function removeCourse(e) {
+    e.stopPropagation();
     selectedIds.remove(course.id);
   }
 </script>
 
-<div class="px-4 py-3 border-b border-border-light hover:bg-surface-alt/50 transition-colors">
+<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+<div class="px-4 py-3 border-b border-border-light hover:bg-surface-alt/50 transition-colors cursor-pointer" onclick={() => detailCourse.set(course)}>
   <div class="flex items-start justify-between gap-2">
     <div class="flex-1 min-w-0">
       <div class="text-sm font-medium text-ink leading-snug truncate">{course.title_en}</div>
