@@ -8,6 +8,7 @@
   import WeekSelector from './components/WeekSelector.svelte';
   import ConflictModal from './components/ConflictModal.svelte';
   import CourseDetail from './components/CourseDetail.svelte';
+  import AddCustomItemModal from './components/AddCustomItemModal.svelte';
 
   let loading = $state(true);
 
@@ -80,4 +81,5 @@
 
   <ConflictModal />
   <CourseDetail />
+  <AddCustomItemModal />
 {/if}

@@ -69,6 +69,53 @@ function createSelectionStore() {
 
 export const selectedIds = createSelectionStore();
 
+// ── Custom calendar items ────────────────────────────────────
+function createCustomItemsStore() {
+  let initial = [];
+  try {
+    const saved = localStorage.getItem('watercolor-custom-items');
+    if (saved) {
+      initial = JSON.parse(saved).map(item => ({
+        ...item,
+        weeks: new Set(item.weeks),
+      }));
+    }
+  } catch {}
+
+  const { subscribe, update, set } = writable(initial);
+
+  function persist(items) {
+    localStorage.setItem(
+      'watercolor-custom-items',
+      JSON.stringify(items.map(item => ({ ...item, weeks: [...item.weeks] })))
+    );
+  }
+
+  return {
+    subscribe,
+    add(item) {
+      update(items => {
+        const next = [...items, { ...item, id: crypto.randomUUID?.() ?? String(Date.now()) }];
+        persist(next);
+        return next;
+      });
+    },
+    remove(id) {
+      update(items => {
+        const next = items.filter(item => item.id !== id);
+        persist(next);
+        return next;
+      });
+    },
+    clear() {
+      set([]);
+      localStorage.setItem('watercolor-custom-items', '[]');
+    },
+  };
+}
+
+export const customItems = createCustomItemsStore();
+
 // ── Current week (null = "all weeks") ─────────────────────────
 export const currentWeek = writable(1);
 
@@ -141,10 +188,10 @@ export const filteredCourses = derived(
 );
 
 // ── Derived: calendar grid for current week ───────────────────
-// Returns Map of "day-period" -> [{ course, slot }]
+// Returns Map of "day-period" -> [{ course, slot } | { custom, slot }]
 export const calendarGrid = derived(
-  [selectedCourses, currentWeek],
-  ([$selected, $week]) => {
+  [selectedCourses, customItems, currentWeek],
+  ([$selected, $custom, $week]) => {
     const grid = new Map();
 
     for (const course of $selected) {
@@ -154,6 +201,15 @@ export const calendarGrid = derived(
           if (!grid.has(key)) grid.set(key, []);
           grid.get(key).push({ course, slot });
         }
+      }
+    }
+
+    for (const item of $custom) {
+      const slot = { day: item.day, period: item.period, weeks: item.weeks };
+      if ($week === null || item.weeks.has($week)) {
+        const key = `${item.day}-${item.period}`;
+        if (!grid.has(key)) grid.set(key, []);
+        grid.get(key).push({ custom: item, slot });
       }
     }
 
@@ -175,6 +231,8 @@ export const departments = derived(
 
 // ── Derived: whether weekends are needed ──────────────────────
 export const hasWeekendCourses = derived(
-  selectedCourses,
-  $selected => $selected.some(c => c.slots.some(s => s.day >= 6))
+  [selectedCourses, customItems],
+  ([$selected, $custom]) =>
+    $selected.some(c => c.slots.some(s => s.day >= 6)) ||
+    $custom.some(item => item.day >= 6)
 );
