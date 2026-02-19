@@ -80,8 +80,8 @@ export const searchQuery = writable('');
 export const filterDepartments = writable([]); // array of department strings
 export const filterCreditMin = writable('');    // '' = no min
 export const filterCreditMax = writable('');    // '' = no max
-export const filterDay = writable('');
-export const filterPeriod = writable('');
+export const filterDays = writable([]);       // array of day ids (numbers)
+export const filterPeriods = writable([]);     // array of period ids (numbers)
 
 // ── Derived: selected courses with color ──────────────────────
 export const selectedCourses = derived(
@@ -100,8 +100,8 @@ export const selectedCourses = derived(
 
 // ── Derived: filtered courses for search ──────────────────────
 export const filteredCourses = derived(
-  [allCourses, searchQuery, filterDepartments, filterCreditMin, filterCreditMax, filterDay, filterPeriod],
-  ([$all, $query, $depts, $creditMin, $creditMax, $day, $period]) => {
+  [allCourses, searchQuery, filterDepartments, filterCreditMin, filterCreditMax, filterDays, filterPeriods],
+  ([$all, $query, $depts, $creditMin, $creditMax, $days, $periods]) => {
     let result = $all;
 
     if ($query) {
@@ -128,14 +128,12 @@ export const filteredCourses = derived(
       result = result.filter(c => c.credit <= max);
     }
 
-    if ($day) {
-      const dayNum = parseInt($day, 10);
-      result = result.filter(c => c.slots.some(s => s.day === dayNum));
+    if ($days.length > 0) {
+      result = result.filter(c => c.slots.some(s => $days.includes(s.day)));
     }
 
-    if ($period) {
-      const periodNum = parseInt($period, 10);
-      result = result.filter(c => c.slots.some(s => s.period === periodNum));
+    if ($periods.length > 0) {
+      result = result.filter(c => c.slots.some(s => $periods.includes(s.period)));
     }
 
     return result;

@@ -1,5 +1,4 @@
 <script>
-  import MultiSelect from 'svelte-multiselect';
   import {
     filteredCourses,
     allCourses,
@@ -7,34 +6,43 @@
     filterDepartments,
     filterCreditMin,
     filterCreditMax,
-    filterDay,
-    filterPeriod,
+    filterDays,
+    filterPeriods,
     departments,
     selectedIds,
   } from '../lib/stores.js';
   import { DAYS, PERIODS } from '../lib/constants.js';
   import CourseCard from './CourseCard.svelte';
+  import MultiSelect from './MultiSelect.svelte';
 
   let { mobile = false } = $props();
   let panelCollapsed = $state(false);
-  let deptSelection = $state([]);
 
-  function handleDeptChange() {
-    filterDepartments.set(deptSelection);
-  }
+  let selectedDepts = $state([]);
+  let selectedDays = $state([]);
+  let selectedPeriods = $state([]);
+
+  const dayOptions = DAYS.map(d => ({ value: d.id, label: d.name }));
+  const periodOptions = PERIODS.map(p => ({ value: p.id, label: `P${p.id} ${p.time}` }));
+
+  let deptOptions = $derived(
+    $departments.map(d => ({ value: d, label: d }))
+  );
 
   function clearFilters() {
     searchQuery.set('');
-    deptSelection = [];
+    selectedDepts = [];
+    selectedDays = [];
+    selectedPeriods = [];
     filterDepartments.set([]);
+    filterDays.set([]);
+    filterPeriods.set([]);
     filterCreditMin.set('');
     filterCreditMax.set('');
-    filterDay.set('');
-    filterPeriod.set('');
   }
 
   let hasActiveFilters = $derived(
-    $searchQuery || $filterDepartments.length > 0 || $filterCreditMin || $filterCreditMax || $filterDay || $filterPeriod
+    $searchQuery || $filterDepartments.length > 0 || $filterCreditMin || $filterCreditMax || $filterDays.length > 0 || $filterPeriods.length > 0
   );
 </script>
 
@@ -97,88 +105,68 @@
       <!-- Department multi-select -->
       <div class="mt-2 sm:mt-3">
         <span class="text-[11px] font-medium text-ink-faint uppercase tracking-wider">Department</span>
-        <div class="mt-1 dept-select">
+        <div class="mt-1">
           <MultiSelect
-            bind:selected={deptSelection}
-            options={$departments}
+            options={deptOptions}
+            bind:selected={selectedDepts}
+            onchange={(v) => filterDepartments.set(v)}
             placeholder="All departments"
-            on:change={handleDeptChange}
-            on:remove={handleDeptChange}
-            on:removeAll={() => { deptSelection = []; filterDepartments.set([]); }}
-            --sms-border="1px solid var(--color-border)"
-            --sms-border-radius="0.375rem"
-            --sms-font-size="0.75rem"
-            --sms-padding="0.25rem 0.5rem"
-            --sms-bg="var(--color-surface)"
-            --sms-text-color="var(--color-ink-light)"
-            --sms-placeholder-color="var(--color-ink-faint)"
-            --sms-open-border-color="var(--color-ink-faint)"
-            --sms-selected-bg="var(--color-surface-alt)"
-            --sms-selected-text-color="var(--color-ink)"
-            --sms-li-selected-bg="var(--color-surface-alt)"
-            --sms-li-active-bg="var(--color-surface-hover)"
-            --sms-options-bg="white"
-            --sms-max-height="14rem"
+            searchable={true}
           />
         </div>
       </div>
 
-      <!-- Credit range + day + period -->
-      <div class="mt-2 sm:mt-3 space-y-2">
+      <!-- Credit range -->
+      <div class="mt-2 sm:mt-3">
+        <span class="text-[11px] font-medium text-ink-faint uppercase tracking-wider">Credits</span>
+        <div class="flex items-center gap-2 mt-1">
+          <select
+            class="flex-1 px-2 py-1.5 border border-border rounded text-xs bg-surface text-ink-light focus:outline-none cursor-pointer"
+            onchange={(e) => filterCreditMin.set(e.target.value)}
+            value={$filterCreditMin}
+          >
+            <option value="">Min</option>
+            {#each [1,2,3,4,5] as c}
+              <option value={c}>{c}</option>
+            {/each}
+          </select>
+          <span class="text-ink-faint text-xs">&ndash;</span>
+          <select
+            class="flex-1 px-2 py-1.5 border border-border rounded text-xs bg-surface text-ink-light focus:outline-none cursor-pointer"
+            onchange={(e) => filterCreditMax.set(e.target.value)}
+            value={$filterCreditMax}
+          >
+            <option value="">Max</option>
+            {#each [1,2,3,4,5] as c}
+              <option value={c}>{c}</option>
+            {/each}
+          </select>
+        </div>
+      </div>
+
+      <!-- Day + Period multi-selects -->
+      <div class="mt-2 sm:mt-3 grid grid-cols-2 gap-2">
         <div>
-          <span class="text-[11px] font-medium text-ink-faint uppercase tracking-wider">Credits</span>
-          <div class="flex items-center gap-2 mt-1">
-            <select
-              class="flex-1 px-2 py-1.5 border border-border rounded text-xs bg-surface text-ink-light focus:outline-none cursor-pointer"
-              onchange={(e) => filterCreditMin.set(e.target.value)}
-              value={$filterCreditMin}
-            >
-              <option value="">Min</option>
-              {#each [1,2,3,4,5] as c}
-                <option value={c}>{c}</option>
-              {/each}
-            </select>
-            <span class="text-ink-faint text-xs">&ndash;</span>
-            <select
-              class="flex-1 px-2 py-1.5 border border-border rounded text-xs bg-surface text-ink-light focus:outline-none cursor-pointer"
-              onchange={(e) => filterCreditMax.set(e.target.value)}
-              value={$filterCreditMax}
-            >
-              <option value="">Max</option>
-              {#each [1,2,3,4,5] as c}
-                <option value={c}>{c}</option>
-              {/each}
-            </select>
+          <span class="text-[11px] font-medium text-ink-faint uppercase tracking-wider">Day</span>
+          <div class="mt-1">
+            <MultiSelect
+              options={dayOptions}
+              bind:selected={selectedDays}
+              onchange={(v) => filterDays.set(v)}
+              placeholder="Any day"
+            />
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <span class="text-[11px] font-medium text-ink-faint uppercase tracking-wider">Day</span>
-            <select
-              class="mt-1 w-full px-2 py-1.5 border border-border rounded text-xs bg-surface text-ink-light focus:outline-none cursor-pointer"
-              onchange={(e) => filterDay.set(e.target.value)}
-              value={$filterDay}
-            >
-              <option value="">Any day</option>
-              {#each DAYS as day}
-                <option value={day.id}>{day.name}</option>
-              {/each}
-            </select>
-          </div>
-
-          <div>
-            <span class="text-[11px] font-medium text-ink-faint uppercase tracking-wider">Period</span>
-            <select
-              class="mt-1 w-full px-2 py-1.5 border border-border rounded text-xs bg-surface text-ink-light focus:outline-none cursor-pointer"
-              onchange={(e) => filterPeriod.set(e.target.value)}
-              value={$filterPeriod}
-            >
-              <option value="">Any period</option>
-              {#each PERIODS as p}
-                <option value={p.id}>P{p.id} {p.time}</option>
-              {/each}
-            </select>
+        <div>
+          <span class="text-[11px] font-medium text-ink-faint uppercase tracking-wider">Period</span>
+          <div class="mt-1">
+            <MultiSelect
+              options={periodOptions}
+              bind:selected={selectedPeriods}
+              onchange={(v) => filterPeriods.set(v)}
+              placeholder="Any period"
+            />
           </div>
         </div>
       </div>
