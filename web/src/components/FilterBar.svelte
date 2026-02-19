@@ -9,7 +9,8 @@
     filterDays,
     filterPeriods,
     filterEnglishOnly,
-    filterIncludeBilingual,
+    filterBilingualMajorityEnglish,
+    filterBilingualMajorityChinese,
     departments,
   } from '../lib/stores.js';
   import { DAYS, PERIODS } from '../lib/constants.js';
@@ -41,11 +42,12 @@
     filterCreditMin.set('');
     filterCreditMax.set('');
     filterEnglishOnly.set(false);
-    filterIncludeBilingual.set(false);
+    filterBilingualMajorityEnglish.set(false);
+    filterBilingualMajorityChinese.set(false);
   }
 
   let hasActiveFilters = $derived(
-    $searchQuery || $filterDepartments.length > 0 || $filterCreditMin || $filterCreditMax || $filterDays.length > 0 || $filterPeriods.length > 0 || $filterEnglishOnly
+    $searchQuery || $filterDepartments.length > 0 || $filterCreditMin || $filterCreditMax || $filterDays.length > 0 || $filterPeriods.length > 0 || $filterEnglishOnly || $filterBilingualMajorityEnglish || $filterBilingualMajorityChinese
   );
 
   let filtersOpen = $state(false);
@@ -204,28 +206,33 @@
   </div>
 
   <!-- Language filter checkboxes -->
-  <div class="flex items-center gap-4 mt-1.5">
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5">
     <label class="flex items-center gap-1.5 text-[11px] text-ink-faint cursor-pointer select-none">
       <input
         type="checkbox"
         checked={$filterEnglishOnly}
-        onchange={(e) => {
-          filterEnglishOnly.set(e.target.checked);
-          if (!e.target.checked) filterIncludeBilingual.set(false);
-        }}
+        onchange={(e) => filterEnglishOnly.set(e.target.checked)}
         class="accent-ink w-3 h-3 cursor-pointer"
       />
-      English courses only
+      English only
     </label>
-    <label class="flex items-center gap-1.5 text-[11px] cursor-pointer select-none {$filterEnglishOnly ? 'text-ink-faint' : 'text-ink-faint/40 pointer-events-none'}">
+    <label class="flex items-center gap-1.5 text-[11px] text-ink-faint cursor-pointer select-none">
       <input
         type="checkbox"
-        checked={$filterIncludeBilingual}
-        onchange={(e) => filterIncludeBilingual.set(e.target.checked)}
-        disabled={!$filterEnglishOnly}
-        class="accent-ink w-3 h-3 cursor-pointer disabled:cursor-default"
+        checked={$filterBilingualMajorityEnglish}
+        onchange={(e) => filterBilingualMajorityEnglish.set(e.target.checked)}
+        class="accent-ink w-3 h-3 cursor-pointer"
       />
-      Include bilingual
+      Bilingual (majority English)
+    </label>
+    <label class="flex items-center gap-1.5 text-[11px] text-ink-faint cursor-pointer select-none">
+      <input
+        type="checkbox"
+        checked={$filterBilingualMajorityChinese}
+        onchange={(e) => filterBilingualMajorityChinese.set(e.target.checked)}
+        class="accent-ink w-3 h-3 cursor-pointer"
+      />
+      Bilingual (majority Chinese)
     </label>
   </div>
 </div>

@@ -130,7 +130,8 @@ export const filterCreditMax = writable('');    // '' = no max
 export const filterDays = writable([]);       // array of day ids (numbers)
 export const filterPeriods = writable([]);     // array of period ids (numbers)
 export const filterEnglishOnly = writable(false);
-export const filterIncludeBilingual = writable(false);
+export const filterBilingualMajorityEnglish = writable(false);
+export const filterBilingualMajorityChinese = writable(false);
 
 // ── Derived: selected courses with color ──────────────────────
 export const selectedCourses = derived(
@@ -149,8 +150,8 @@ export const selectedCourses = derived(
 
 // ── Derived: filtered courses for search ──────────────────────
 export const filteredCourses = derived(
-  [allCourses, searchQuery, filterDepartments, filterCreditMin, filterCreditMax, filterDays, filterPeriods, filterEnglishOnly, filterIncludeBilingual],
-  ([$all, $query, $depts, $creditMin, $creditMax, $days, $periods, $englishOnly, $includeBilingual]) => {
+  [allCourses, searchQuery, filterDepartments, filterCreditMin, filterCreditMax, filterDays, filterPeriods, filterEnglishOnly, filterBilingualMajorityEnglish, filterBilingualMajorityChinese],
+  ([$all, $query, $depts, $creditMin, $creditMax, $days, $periods, $englishOnly, $bilingualEn, $bilingualZh]) => {
     let result = $all;
 
     if ($query) {
@@ -185,12 +186,17 @@ export const filteredCourses = derived(
       result = result.filter(c => c.slots.some(s => $periods.includes(s.period)));
     }
 
-    if ($englishOnly) {
-      const features = (c) => (c.course_features || '').toLowerCase();
+    if ($englishOnly || $bilingualEn || $bilingualZh) {
       result = result.filter(c => {
-        const f = features(c);
-        if (f.includes('foreign language')) return true;
-        if ($includeBilingual && f.includes('bilingual')) return true;
+        const f = (c.course_features || '').toLowerCase();
+        const hasForeignLang = f.includes('foreign language');
+        const hasBilingual = f.includes('bilingual');
+        // "Taught in foreign language" — fully English (has "foreign language", no "bilingual")
+        if ($englishOnly && hasForeignLang && !hasBilingual) return true;
+        // "≥50% taught in foreign language (bilingual course)" — bilingual, majority English
+        if ($bilingualEn && hasForeignLang && hasBilingual) return true;
+        // "mainly taught in Chinese (bilingual course)" — bilingual, majority Chinese
+        if ($bilingualZh && !hasForeignLang && hasBilingual) return true;
         return false;
       });
     }
