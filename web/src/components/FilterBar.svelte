@@ -8,6 +8,8 @@
     filterCreditMax,
     filterDays,
     filterPeriods,
+    filterEnglishOnly,
+    filterIncludeBilingual,
     departments,
   } from '../lib/stores.js';
   import { DAYS, PERIODS } from '../lib/constants.js';
@@ -38,10 +40,12 @@
     filterPeriods.set([]);
     filterCreditMin.set('');
     filterCreditMax.set('');
+    filterEnglishOnly.set(false);
+    filterIncludeBilingual.set(false);
   }
 
   let hasActiveFilters = $derived(
-    $searchQuery || $filterDepartments.length > 0 || $filterCreditMin || $filterCreditMax || $filterDays.length > 0 || $filterPeriods.length > 0
+    $searchQuery || $filterDepartments.length > 0 || $filterCreditMin || $filterCreditMax || $filterDays.length > 0 || $filterPeriods.length > 0 || $filterEnglishOnly
   );
 
   let filtersOpen = $state(false);
@@ -60,7 +64,8 @@
     ($filterDepartments.length > 0 ? 1 : 0) +
     ($filterCreditMin || $filterCreditMax ? 1 : 0) +
     ($filterDays.length > 0 ? 1 : 0) +
-    ($filterPeriods.length > 0 ? 1 : 0)
+    ($filterPeriods.length > 0 ? 1 : 0) +
+    ($filterEnglishOnly ? 1 : 0)
   );
 </script>
 
@@ -196,5 +201,31 @@
         Clear filters
       </button>
     {/if}
+  </div>
+
+  <!-- Language filter checkboxes -->
+  <div class="flex items-center gap-4 mt-1.5">
+    <label class="flex items-center gap-1.5 text-[11px] text-ink-faint cursor-pointer select-none">
+      <input
+        type="checkbox"
+        checked={$filterEnglishOnly}
+        onchange={(e) => {
+          filterEnglishOnly.set(e.target.checked);
+          if (!e.target.checked) filterIncludeBilingual.set(false);
+        }}
+        class="accent-ink w-3 h-3 cursor-pointer"
+      />
+      English courses only
+    </label>
+    <label class="flex items-center gap-1.5 text-[11px] cursor-pointer select-none {$filterEnglishOnly ? 'text-ink-faint' : 'text-ink-faint/40 pointer-events-none'}">
+      <input
+        type="checkbox"
+        checked={$filterIncludeBilingual}
+        onchange={(e) => filterIncludeBilingual.set(e.target.checked)}
+        disabled={!$filterEnglishOnly}
+        class="accent-ink w-3 h-3 cursor-pointer disabled:cursor-default"
+      />
+      Include bilingual
+    </label>
   </div>
 </div>

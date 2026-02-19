@@ -129,6 +129,8 @@ export const filterCreditMin = writable('');    // '' = no min
 export const filterCreditMax = writable('');    // '' = no max
 export const filterDays = writable([]);       // array of day ids (numbers)
 export const filterPeriods = writable([]);     // array of period ids (numbers)
+export const filterEnglishOnly = writable(false);
+export const filterIncludeBilingual = writable(false);
 
 // ── Derived: selected courses with color ──────────────────────
 export const selectedCourses = derived(
@@ -147,8 +149,8 @@ export const selectedCourses = derived(
 
 // ── Derived: filtered courses for search ──────────────────────
 export const filteredCourses = derived(
-  [allCourses, searchQuery, filterDepartments, filterCreditMin, filterCreditMax, filterDays, filterPeriods],
-  ([$all, $query, $depts, $creditMin, $creditMax, $days, $periods]) => {
+  [allCourses, searchQuery, filterDepartments, filterCreditMin, filterCreditMax, filterDays, filterPeriods, filterEnglishOnly, filterIncludeBilingual],
+  ([$all, $query, $depts, $creditMin, $creditMax, $days, $periods, $englishOnly, $includeBilingual]) => {
     let result = $all;
 
     if ($query) {
@@ -181,6 +183,16 @@ export const filteredCourses = derived(
 
     if ($periods.length > 0) {
       result = result.filter(c => c.slots.some(s => $periods.includes(s.period)));
+    }
+
+    if ($englishOnly) {
+      const features = (c) => (c.course_features || '').toLowerCase();
+      result = result.filter(c => {
+        const f = features(c);
+        if (f.includes('foreign language')) return true;
+        if ($includeBilingual && f.includes('bilingual')) return true;
+        return false;
+      });
     }
 
     return result;

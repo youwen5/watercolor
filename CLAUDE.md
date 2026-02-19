@@ -52,6 +52,14 @@ nix develop .#web   # enters shell with nodejs + pnpm
 cd web && pnpm install && pnpm dev
 ```
 
+### Building
+
+Always use the Nix shell to obtain `pnpm`, then use `pnpm build`:
+
+```bash
+cd web && nix develop ..#web --command pnpm build
+```
+
 Append the `--option substituters '...'` flag (see above) for faster Nix downloads in China.
 
 ### Architecture
