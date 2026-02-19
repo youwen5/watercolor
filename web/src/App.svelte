@@ -9,6 +9,7 @@
   import ConflictModal from './components/ConflictModal.svelte';
   import CourseDetail from './components/CourseDetail.svelte';
   import AddCustomItemModal from './components/AddCustomItemModal.svelte';
+  import SlotActionModal from './components/SlotActionModal.svelte';
 
   let loading = $state(true);
 
@@ -81,5 +82,6 @@
 
   <ConflictModal />
   <CourseDetail />
+  <SlotActionModal />
   <AddCustomItemModal />
 {/if}

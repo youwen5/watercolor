@@ -1,7 +1,7 @@
 <script>
   import CourseBlock from './CourseBlock.svelte';
   import CustomBlock from './CustomBlock.svelte';
-  import { pendingCustomSlot } from './AddCustomItemModal.svelte';
+  import { pendingSlotAction } from './SlotActionModal.svelte';
 
   let { day, period, entries, showWeekBadge = false } = $props();
 
@@ -9,7 +9,7 @@
 
   function handleCellClick(e) {
     if (e.target === e.currentTarget) {
-      pendingCustomSlot.set({ day: day.id, period: period.id });
+      pendingSlotAction.set({ day: day.id, period: period.id });
     }
   }
 </script>

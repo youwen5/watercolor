@@ -17,6 +17,10 @@
   let selectedDays = $state([]);
   let selectedPeriods = $state([]);
 
+  // Sync local state when stores are set externally (e.g. from calendar slot action)
+  $effect(() => { selectedDays = [...$filterDays]; });
+  $effect(() => { selectedPeriods = [...$filterPeriods]; });
+
   const dayOptions = DAYS.map(d => ({ value: d.id, label: d.short }));
   const periodOptions = PERIODS.map(p => ({ value: p.id, label: `P${p.id} ${p.time}` }));
 
