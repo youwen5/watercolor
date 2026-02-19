@@ -13,8 +13,8 @@ venv/
 page_source.html
 
 # Output data
-*.csv
-*.json
+/*.csv
+/*.json
 courses.db
 
 # Web app
