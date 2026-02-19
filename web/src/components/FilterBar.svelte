@@ -41,6 +41,16 @@
   );
 
   let filtersOpen = $state(false);
+  let filtersSettled = $state(false);
+
+  function toggleFilters() {
+    filtersOpen = !filtersOpen;
+    if (!filtersOpen) filtersSettled = false;
+  }
+
+  function onTransitionEnd() {
+    if (filtersOpen) filtersSettled = true;
+  }
 
   let activeFilterCount = $derived(
     ($filterDepartments.length > 0 ? 1 : 0) +
@@ -68,25 +78,32 @@
       </div>
       <!-- Mobile filter toggle -->
       <button
-        onclick={() => filtersOpen = !filtersOpen}
-        class="lg:hidden shrink-0 mb-px px-2.5 py-1.5 border border-border rounded text-xs text-ink-light hover:text-ink hover:bg-surface-alt transition-colors cursor-pointer flex items-center gap-1"
+        onclick={toggleFilters}
+        class="lg:hidden shrink-0 mb-px px-2.5 py-1.5 border rounded text-xs transition-colors cursor-pointer flex items-center gap-1.5
+          {filtersOpen || activeFilterCount > 0
+            ? 'border-ink bg-ink text-white hover:bg-ink-light'
+            : 'border-border text-ink-light hover:text-ink hover:bg-surface-alt'}"
         aria-label={filtersOpen ? 'Hide filters' : 'Show filters'}
       >
         <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
           <path d="M1 3h14M3 8h10M5.5 13h5" />
         </svg>
+        <span>Filters</span>
         {#if activeFilterCount > 0}
-          <span class="bg-ink text-white text-[9px] rounded-full w-3.5 h-3.5 flex items-center justify-center leading-none font-medium">{activeFilterCount}</span>
+          <span class="text-[9px] rounded-full w-3.5 h-3.5 flex items-center justify-center leading-none font-medium
+            {filtersOpen ? 'bg-white text-ink' : 'bg-ink text-white'}">{activeFilterCount}</span>
         {/if}
       </button>
     </div>
 
     <!-- Collapsible filter section. lg:contents dissolves on desktop so items join the flex-wrap. -->
     <div
-      class="grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out lg:contents"
+      class="grid transition-[grid-template-rows] duration-200 ease-out lg:contents"
+      class:overflow-hidden={!filtersSettled}
       style:grid-template-rows={filtersOpen ? '1fr' : '0fr'}
+      ontransitionend={onTransitionEnd}
     >
-      <div class="min-h-0 overflow-hidden lg:contents">
+      <div class="min-h-0 lg:contents" class:overflow-hidden={!filtersSettled}>
         <div class="flex flex-wrap items-end gap-x-3 gap-y-2 pt-2 lg:contents">
 
           <!-- Department -->
